@@ -3,10 +3,9 @@ package com.example.demo.controllers;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +25,8 @@ import com.example.demo.model.requests.ModifyCartRequest;
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
-	private final static Logger logger = LoggerFactory.getLogger(CartController.class);
+	private final static Logger log = LoggerFactory.getLogger(CartController.class);
 
-//	private final static Logger LOGGER =
-//			Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -41,7 +38,8 @@ public class CartController {
 	
 	@PostMapping("/addToCart")
 	public ResponseEntity<Cart> addTocart(@RequestBody ModifyCartRequest request) {
-		logger.info("CartControl.addToCart : request for user : "+request.getUsername());
+		log.info("CartControl.addToCart : request for user : {} ",request.getUsername());
+
 		User user = userRepository.findByUsername(request.getUsername());
 		if(user == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

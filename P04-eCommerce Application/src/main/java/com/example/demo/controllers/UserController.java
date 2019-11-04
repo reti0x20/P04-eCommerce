@@ -1,10 +1,8 @@
 package com.example.demo.controllers;
 
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.logging.log4j.* ;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +23,7 @@ import com.example.demo.model.requests.CreateUserRequest;
 @RequestMapping("/api/user")
 public class UserController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserRepository userRepository;
@@ -36,20 +34,20 @@ public class UserController {
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
-		logger.info("Get user by id: " + id);
+		log.info("Get user by id: {} " , id);
 		return ResponseEntity.of(userRepository.findById(id));
 	}
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
 		User user = userRepository.findByUsername(username);
-		logger.info("Get user by username: "+username);
+		log.info("Get user by username:{} ",username);
 		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
-		logger.info("Creating user :" + createUserRequest.getUsername());
+		log.info("Creating user : {}" ,createUserRequest.getUsername());
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
 		Cart cart = new Cart();
@@ -57,11 +55,11 @@ public class UserController {
 		user.setCart(cart);
 		if(createUserRequest.getPassword().length()<7||
 			!createUserRequest.getPassword().equals(createUserRequest.getComfirmPassword())){
-			logger.info("Error with password. Can't create user : "+createUserRequest.getUsername());
+			log.info("Error with password. Can't create user : {} ",createUserRequest.getUsername());
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
-		logger.info("User password by Encode: "+user.getPassword());
+		log.info("User password by Encode:{} ",user.getPassword());
 
 		userRepository.save(user);
 		return ResponseEntity.ok(user);
