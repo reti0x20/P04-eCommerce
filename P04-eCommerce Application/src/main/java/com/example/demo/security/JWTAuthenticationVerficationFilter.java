@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JWTAuthenticationVerficationFilter  extends BasicAuthenticationFilter {
-    private final static Logger log = LoggerFactory.getLogger(JWTAuthenticationVerficationFilter.class);
+//    private final static Logger log = LoggerFactory.getLogger(JWTAuthenticationVerficationFilter.class);
 
     public JWTAuthenticationVerficationFilter(
             AuthenticationManager authManager) {
@@ -33,7 +33,7 @@ public class JWTAuthenticationVerficationFilter  extends BasicAuthenticationFilt
     protected void doFilterInternal(HttpServletRequest req,
             HttpServletResponse res,
             FilterChain chain) throws IOException, ServletException{
-        log.info("JWTAuthenticationVerficationFilter-->doFilterInternal-->req: {} ",req );
+//        log.info("JWTAuthenticationVerficationFilter-->doFilterInternal-->req: {} ",req );
         String header = req.getHeader(SecurityConstants.HEADER_STRING);
         if(header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)){
             chain.doFilter(req, res);
@@ -43,11 +43,11 @@ public class JWTAuthenticationVerficationFilter  extends BasicAuthenticationFilt
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req,res);
-        log.info("JWTAuthenticationVerficationFilter-->doFilterInternal-->res: {} ",res);
+//        log.info("JWTAuthenticationVerficationFilter-->doFilterInternal-->res: {} ",res);
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req){
-        log.info("JWTAuthenticationVerficationFilter-->doFilterInternal-->req: {}",req);
+//        log.info("JWTAuthenticationVerficationFilter-->doFilterInternal-->req: {}",req);
         String token = req.getHeader(SecurityConstants.HEADER_STRING);
         if(token != null){
             String user = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()))
